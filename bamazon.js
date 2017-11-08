@@ -23,8 +23,6 @@ connection.connect(function(err){
 //    
 //    });
 //}
-    
-    
 //Prompt the user, what would you like to buy? 
 function ask(){
     inquirer.prompt([
@@ -42,43 +40,20 @@ function ask(){
     }
     ])
     .then(function(answer){
-        //sets the users asnwer to a variable
-        var userItem = answer.itemToBuy; 
         //query varible
         var query = "Select stock_quantity from products where ?";
         //running the query against the database with the query and answer from above 
-        connection.query(query, {item_id: answer.itemToBuy}, function(err, res){
+        connection.query(query, {item_id: answer.itemToBuy}, function(err, stock_quantity){
         if (err) throw err;
-        console.log(res);
+        var left = stock_quantity;
+        console.log(left);
+        if (answer.quantity >= stock_quantity){
+            console.log("you ordered too much, not enough in stock"); 
+        }  else {
+            console.log("your purchase is coming up");
+        }
         });    
         
      });
 }  
-
-        
-        //sets the users second answer to a variable
-//        var userQuantity = answers.quantity; 
-//        //console log to check above line is working 
-//        console.log(userQuantity);
-//        if (userQuantity <= results){
-//            console.log("you bought it");
-//        } else 
-//        {
-//            console.log("there is not enough stock");
-//        }
-//        
-//    });
-//}
-
-//function compareUserQunntityToDB() {
-//    var query = "Select stock_quantity from products where item_id ?";
-//    connection.query(query, {id: answers.itemToBuy}, function(err, res){
-//        console.log(res);
-//    });
-////}
-//run the SQL query: select stock_quantity from products where item_id = 1
-//compare the SQL query result to the variable from user's second question answer 
-    //if user's answer <= store quantity, 
-        //Your total = quanity * price from database 
-        //database quantiy decreases by current quantity minus user's input 
-    //else tell the user "insufficient quantity!"
+      
